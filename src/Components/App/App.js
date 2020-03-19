@@ -11,22 +11,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [
-        {
-          id: 1,
-          name: "example1",
-          artist: "exampleArtist1",
-          album: "exampleAlbum1"
-        },
-        {
-          id: 2,
-          name: "example2",
-          artist: "exampleArtist2",
-          album: "exampleAlbum2"
-        }
-      ],
+      searchResults: [],
       playlistName: "My personal playlist",
-      playlistTracks: [{id: 4, name: "playlistName1", artist: "playlistArtist1", album: "playlistAlbum1"}]
+      playlistTracks: []
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -56,6 +43,12 @@ class App extends React.Component {
   
   savePlaylist() {
     const trackURIs = this.state.playlistTracks.map(track => track.uri);
+    Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
+      this.setState({
+        playlistName: "New Playlist",
+        playlistTracks: []
+      })
+    })
   }
 
   search(term) {
